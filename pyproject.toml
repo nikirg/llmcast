@@ -1,21 +1,36 @@
-[tool.poetry]
-name = "llm_tasker"
+[project]
+name = "llmcast"
 version = "0.1.0"
-description = "A lightweight Python library for creating tasks and workflows with Large Language Models (LLMs) using prompt templates."
-authors = ["Nikita Irgashev <nik.irg@yandex.ru>"]
-license = "MIT"
+description = "Type-safe LLM output parsing with Pydantic models and Jinja2 prompt templates"
 readme = "README.md"
-packages = [{include = "llm_task"}]
-homepage = "https://github.com/nikirg/llm_task"
-repository = "https://github.com/nikirg/llm_task"
-documentation = "https://github.com/nikirg/llm_task"
+license = { file = "LICENSE" }
+requires-python = ">=3.13"
+authors = [{ name = "Nikita Irgashev" }]
+keywords = ["llm", "openai", "pydantic", "structured-output", "parsing", "jinja2", "ai"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+dependencies = [
+    "jinja2>=3.1.6",
+    "loguru>=0.7.3",
+    "openai>=2.29.0",
+    "pydantic>=2.12.5",
+    "pyyaml>=6.0.3",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-pydantic = "^2.9.2"
-openai = "^1.51.0"
+[project.urls]
+Homepage = "https://github.com/nikirg/llmcast"
+Repository = "https://github.com/nikirg/llmcast"
+"Bug Tracker" = "https://github.com/nikirg/llmcast/issues"
 
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+]
