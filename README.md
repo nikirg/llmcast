@@ -17,7 +17,7 @@ pip install llmcast
 A prompt is a Pydantic model whose docstring is a [Jinja2](https://jinja.palletsprojects.com/) template. Fields become template variables and are automatically rendered on `str()`. The full Jinja2 syntax is available — conditionals, loops, filters, etc.
 
 ```python
-from llmcast.template import BaseTemplate
+from llmcast import BaseTemplate
 
 class ExtractCompanyInfo(BaseTemplate):
     """
@@ -38,7 +38,7 @@ Wrap an OpenAI-compatible client and call `.parse()` to get a validated Pydantic
 ```python
 from openai import OpenAI
 from pydantic import BaseModel
-from llmcast.parser.sync import SyncLLMParser
+from llmcast import SyncLLMParser
 
 class CompanyInfo(BaseModel):
     name: str
@@ -64,7 +64,7 @@ Async usage with concurrency control:
 ```python
 import asyncio
 from openai import AsyncOpenAI
-from llmcast.parser.async_ import AsyncLLMParser
+from llmcast import AsyncLLMParser
 
 parser = AsyncLLMParser(AsyncOpenAI(), "gpt-4o", concurrency_limit=5)
 
@@ -101,7 +101,7 @@ class SummaryPrompt(BaseTemplate):
 Configure retries with exponential backoff and jitter via `RetryPolicy`:
 
 ```python
-from llmcast.parser.utils import RetryPolicy
+from llmcast import RetryPolicy
 
 policy = RetryPolicy(
     n_tries=5,
