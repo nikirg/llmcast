@@ -12,10 +12,9 @@ class BaseTemplate(BaseModel):
     output_format: ResultFormat = "json"
 
     @property
-    def template(self) -> str:
+    def template(self) -> str | None:
         if doc := self.__doc__:
             return dedent(doc)
-        return ""
 
     def __str__(self) -> str:
         template_string = self.template
