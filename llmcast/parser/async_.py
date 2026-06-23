@@ -6,7 +6,13 @@ from openai import AsyncOpenAI
 from pydantic import BaseModel
 from loguru import logger
 
-from llmcast.parser.utils import RetryPolicy, TokenUsage, build_messages, parse_content
+from llmcast.parser.utils import (
+    Message,
+    RetryPolicy,
+    TokenUsage,
+    build_messages,
+    parse_content,
+)
 from llmcast.template import BaseTemplate
 
 _RETRYABLE = (openai.RateLimitError, openai.APITimeoutError, openai.InternalServerError)
@@ -70,13 +76,14 @@ class AsyncLLMParser:
         result_schema: Type[TResult],
         query: str | None = None,
         retry_policy: RetryPolicy | None = None,
+        history: list[Message] | None = None,
     ) -> tuple[TResult, TokenUsage] | None:
         if self._structured_output:
             assert prompt.output_format == "json", (
                 "Structured output only supported for JSON"
             )
 
-        messages = build_messages(prompt, query)
+        messages = build_messages(prompt, query, history)
         policy = retry_policy or self._retry_policy
         total_usage = TokenUsage()
 

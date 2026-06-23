@@ -1,13 +1,22 @@
 import random
 import tomllib
 from dataclasses import dataclass
-from typing import Type
+from typing import Literal, Type
 
 import yaml
 from loguru import logger
 from pydantic import BaseModel, ValidationError
 
 from llmcast.template import BaseTemplate, ResultFormat
+
+Role = Literal["system", "user", "assistant", "tool"]
+
+
+class Message(BaseModel):
+    """A single chat turn passed to the parser as conversation history."""
+
+    role: Role
+    content: str
 
 
 @dataclass
@@ -42,8 +51,14 @@ class TokenUsage:
         )
 
 
-def build_messages(prompt: BaseTemplate, query: str | None) -> list[dict]:
-    messages = [{"role": "system", "content": str(prompt)}]
+def build_messages(
+    prompt: BaseTemplate,
+    query: str | None = None,
+    history: list[Message] | None = None,
+) -> list[dict]:
+    messages: list[dict] = [{"role": "system", "content": str(prompt)}]
+    if history:
+        messages += [{"role": m.role, "content": m.content} for m in history]
     if query:
         messages.append({"role": "user", "content": query})
     return messages
