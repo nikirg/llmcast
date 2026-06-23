@@ -55,4 +55,4 @@ def test_history_without_query():
 
 def test_message_validates_role():
     with pytest.raises(ValidationError):
-        Message(role="robot", content="x")  # type: ignore[arg-type]
+        Message(role="robot", content="x")  # type: ignore
