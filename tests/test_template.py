@@ -1,3 +1,5 @@
+import pytest
+
 from llmcast import BaseTemplate
 
 
@@ -27,9 +29,10 @@ def test_custom_output_format():
     assert "yaml" in str(tmpl)
 
 
-def test_empty_docstring_returns_empty():
+def test_empty_docstring_raises():
     tmpl = EmptyTemplate()
-    assert str(tmpl) == ""
+    with pytest.raises(ValueError):
+        str(tmpl)
 
 
 def test_jinja2_conditional():
