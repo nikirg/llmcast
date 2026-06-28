@@ -50,6 +50,57 @@ class TokenUsage:
             total_tokens=self.total_tokens + other.total_tokens,
         )
 
+    @classmethod
+    def from_completion(cls, completion) -> "TokenUsage":
+        usage = getattr(completion, "usage", None)
+        if not usage:
+            return cls()
+        return cls(
+            prompt_tokens=usage.prompt_tokens,
+            completion_tokens=usage.completion_tokens,
+            total_tokens=usage.total_tokens,
+        )
+
+
+@dataclass(frozen=True)
+class SamplingParams:
+    """Decoder-level generation controls passed through to the OpenAI-compatible API.
+
+    Provider-neutral fields map to standard chat-completions parameters. vLLM (and
+    other backends) specific knobs — ``top_k``, ``min_p``, ``repetition_penalty``,
+    ``guided_json`` / ``guided_grammar`` / ``guided_choice`` / ``guided_regex`` —
+    go through ``extra_body``. ``n`` requests multiple samples in a single call.
+    """
+
+    temperature: float | None = None
+    top_p: float | None = None
+    n: int | None = None
+    seed: int | None = None
+    max_tokens: int | None = None
+    frequency_penalty: float | None = None
+    presence_penalty: float | None = None
+    logit_bias: dict[int, float] | None = None
+    logprobs: bool | None = None
+    top_logprobs: int | None = None
+    extra_body: dict | None = None
+
+    def to_kwargs(self) -> dict:
+        """Build chat-completions kwargs, omitting unset (``None``) fields."""
+        fields = {
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+            "n": self.n,
+            "seed": self.seed,
+            "max_tokens": self.max_tokens,
+            "frequency_penalty": self.frequency_penalty,
+            "presence_penalty": self.presence_penalty,
+            "logit_bias": self.logit_bias,
+            "logprobs": self.logprobs,
+            "top_logprobs": self.top_logprobs,
+            "extra_body": self.extra_body,
+        }
+        return {key: value for key, value in fields.items() if value is not None}
+
 
 def build_messages(
     prompt: BaseTemplate,

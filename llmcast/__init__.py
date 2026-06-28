@@ -1,5 +1,5 @@
 from llmcast.template import BaseTemplate, ResultFormat
-from llmcast.parser.utils import Message, Role, RetryPolicy, TokenUsage
+from llmcast.parser.utils import Message, Role, RetryPolicy, SamplingParams, TokenUsage
 from llmcast.parser.sync import SyncLLMParser
 from llmcast.parser.async_ import AsyncLLMParser
 
@@ -9,6 +9,7 @@ __all__ = [
     "Message",
     "Role",
     "RetryPolicy",
+    "SamplingParams",
     "TokenUsage",
     "SyncLLMParser",
     "AsyncLLMParser",
